@@ -1,0 +1,179 @@
+---
+title: Parliamentary Questions - RAG Evaluation
+subtitle: SciNoj Light-#1
+author: Eoin Carney
+format:
+  revealjs:
+    incremental: true
+---
+
+
+## About Me 
+- Day job working in government administration 
+- Hobbyist interest in programming
+- Have been using `clojure` for around 3 years
+
+
+## The Irish Parliament
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/DailChamber_2020.jpg/2560px-DailChamber_2020.jpg)
+
+## What are Parliamentary Questions?
+
+Parliamentary Questions (PQs) are questions asked by members of parliament to Ministers. 
+
+-  [The Deputy] asked the [Minister] if he or his Department have been made aware of books written by Irish authors and protected by copyright being used to train generative AI models by companies operating in Ireland without any agreement or compensation to copyright owners.
+
+- [The Deputy] asked the [Minister] if he will report on the national implementation of the EU Artificial Intelligence Act. 
+
+## Dataset
+
+- Data from the Irish Parliament Website - oireachtas.ie
+- Dates range from **January 17th 2024** to **March 21st 2024**
+- **9,823** total questions asked by 131 members of parliament
+- Column Headings:
+  - `[:question :answer :date :topic :department :url]` 
+
+## Key Questions
+
+- Can we create a RAG to answer questions similar to those in the dataset?
+- Can we do this with `clojure`?
+- How reliable is it?
+
+## RAG Basics 
+
+![](img/rag_architecture.png)
+
+## What do we mean by Evaluation? {auto-animate=true} 
+
+## What do we mean by Evaluation? {auto-animate=true} 
+
+:::: {.columns}
+
+::: {.column width=50%}
+Based on the information provided, capital funding for ICT increased from €60 million in 2018 to €155 million in 2024. This represents an increase of €95 million over this period.
+:::
+
+
+::::
+
+## What do we mean by Evaluation? {auto-animate=true} 
+
+:::: {.columns}
+
+::: {.column width=50%}
+Based on the information provided, capital funding for ICT increased from €60 million in 2018 to €155 million in 2024. This represents an increase of €95 million over this period.
+:::
+
+::: {.column width=50%}
+Capital funding for ICT increased from €60 million in 2018 to €155 million in 2024.
+:::
+
+::::
+
+## What do we mean by Evaluation? {auto-animate=true} 
+
+*Deterministic/Semantic*
+
+::: {.nonincremental}
+
+:::: {.columns}
+
+::: {.column width=50%}
+Based on the information provided, capital funding for ICT increased from €60 million in 2018 to €155 million in 2024. This represents an increase of €95 million over this period.
+:::
+
+::: {.column width=50%}
+Capital funding for ICT increased from €60 million in 2018 to €155 million in 2024.
+:::
+
+::::
+
+:::
+
+## What do we mean by Evaluation? {auto-animate=true} 
+
+*Deterministic/Semantic*
+
+::: {.nonincremental}
+
+:::: {.columns}
+
+::: {.column width=50%}
+Based on the information provided, [capital funding for ICT increased from €60 million in 2018 to €155 million in 2024.]{.fragment .highlight-blue} This represents an increase of €95 million over this period.
+:::
+
+::: {.column width=50%}
+[Capital funding for ICT increased from €60 million in 2018 to €155 million in 2024.]{.fragment .highlight-blue}
+:::
+
+::::
+
+:::
+
+## What do we mean by Evaluation? 
+
+*LLM-based*
+
+> CONTEXT: Capital funding for ICT increased from €60 million in 2018 to €155 million in 2024.
+
+> ANSWER: Based on the information provided, capital funding for ICT increased from €60 million in 2018 to €155 million in 2024. This represents an increase of €95 million over this period.
+
+> Given the context, is the answer correct?
+
+## RAG Evaluation 
+
+![](img/rag_eval.png)
+
+## Data Notebook 
+
+```{.clojure code-line-numbers="4,7,8,11"}
+{:paths ["src" "dev"]
+ :deps  {
+         ;; noj
+         org.scicloj/noj {:mvn/version "2-beta8"}
+         
+         ;; Langchain4j
+         dev.langchain4j/langchain4j {:mvn/version "1.0.0-beta2"}
+         dev.langchain4j/langchain4j-embeddings-all-minilm-l6-v2 {:mvn/version "1.0.0-beta2"}
+         
+         ;; libpython-clj
+         clj-python/libpython-clj {:mvn/version "2.026"}
+
+         selmer/selmer {:mvn/version "1.12.62"}
+         clj-http/clj-http {:mvn/version "3.13.0"}
+         metosin/jsonista {:mvn/version "0.3.13"}
+         clojure.java-time/clojure.java-time {:mvn/version "1.4.3"}
+         net.clojars.wkok/openai-clojure {:mvn/version "0.22.0"}}
+ :aliases {:make-book {:exec-fn notebooks.make/make-book}}}
+```
+ 
+## What did we learn?
+- It is important to explore different approaches to document retrieval and to spend time cleaning and refining database documents
+- The Google models tended to stand out for this kind of task
+- An LLM can be helpful for generating sample questions and answers based on a dataset
+
+## Caveats 
+- The window of information we were exploring was quite small (a two month period), compared to the available data (2+ decades)
+- I 'translated' some of the metrics into `clojure` myself, but more robust testing/optimization would be needed on these. 
+- While the RAG architecture is very simple and intuitive, there are many ways you can configure it, making testing/optimization quite a long and potentially complex exercise! At the same time, it seems to be a valuable exercise.
+
+## Summary 
+- Can we create a RAG to answer questions similar to those in the dataset?
+  - Yes, this was quite simple. As it is a relatively common task for RAGs are there are a lot of good resources for learning.
+- Can we do this with `clojure`?
+  - Absolutely. But...
+- How reliable is it?
+  - This is still an open question. I hope this notebook makes some progress in that direction 
+  
+  
+## Next Steps 
+- Enhance evaluation pipeline by harnessing hybrid evaluation
+- Evaluation of original questions/answers?
+
+## Thank you! 
+
+::: {.nonincremental}
+- Project repo: [github.com/loopdreams/pq-rag-eval](https://github.com/loopdreams/pq-rag-eval)
+- email: [eoincarney0@gmail.com](mailto:eoincarney0@gmail.com)
+::::
