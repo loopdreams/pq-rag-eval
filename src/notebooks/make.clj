@@ -13,7 +13,9 @@
                  "notebooks/generation.clj"
                  "notebooks/rag_evaluation.clj"
                  "notebooks/single_model_eval.clj"]
-   :clean-up-target-dir true})
+   :clean-up-target-dir true
+   :remote-repo {:git-url "https://github.com/loopdreams/pq-rag-eval"
+                 :branch "main"}})
 
 ;; TODO: test for python deps
 
