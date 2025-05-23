@@ -2,6 +2,10 @@
 
 Notebooks for a talk given as part of the [SciNoj-Light-1](https://scicloj.github.io/scinoj-light-1/) clojure conference.
 
+View the notebook at [eoin.site](https://eoin.site/pq_rag_eval/)
+
+## Overview
+
 As part of its democratic functions, the Irish Parliament (Dáil Éireann) has a
 process for members to ask questions of Ministers and their departments.
 
