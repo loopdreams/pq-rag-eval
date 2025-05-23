@@ -74,7 +74,7 @@
 
 (comment
   (let [db-store (InMemoryEmbeddingStore/new)
-        entries-added (count (map #(add-question-to-store! % db-store) questions-list))]
+        entries-added (count (map #(add-doc-to-store! % db-store) questions-list))]
     (do
       (spit "data/retrieval_store/db-store-questions.json" (.serializeToJson db-store))
       (println (str entries-added " records serialised to a json file at data/db-store-questions.json")))))
