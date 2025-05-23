@@ -233,36 +233,6 @@
           results))
 
 
-(comment
-  (defonce test-response
-    (generate-and-evaluate-answers
-     (into {} (take 1 evaluation-dataset-ai))
-     "gemini-2.0-flash"
-     :db-docs
-     prompt-B-fn
-     "gpt-4o"))
-
-
-
-  (-> test-response
-      (tc/dataset)
-      (tc/select-columns [:question
-                          :ground-truth
-                          :answer
-                          :retrieved-context
-
-                          :cosine-similarity
-                          :token-overlap-recall
-                          :token-overlap-precision
-                          :metric-llm-faithfulness-score
-                          :metric-llm-correctness-score
-                          :metric-llm-relevance-score])))
-
-
-
-
-
-
 ;; ### Running the tests
 (comment
   ;; 1. Prompt A with chunked answers ("A1")
